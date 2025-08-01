@@ -41,6 +41,7 @@ export default function Shop() {
       // Handle category filter
       if (selectedCategory === 'all') return true;
       const category = categories.find(cat => cat.slug === selectedCategory);
+      // console.log('Filtering:', { selectedCategory, category, productCategoryId: product.categoryId });
       return product.categoryId === category?.id;
     })
     .sort((a, b) => {
@@ -119,6 +120,10 @@ export default function Shop() {
         {filteredProducts.length === 0 && (
           <div className="text-center py-12" data-testid="no-products-message">
             <p className="text-medium-gray text-lg">No products found matching your criteria.</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Debug: Category: {selectedCategory}, Sale: {saleFromUrl ? 'true' : 'false'}, 
+              Total products: {products.length}, Categories: {categories.length}
+            </p>
           </div>
         )}
       </div>
