@@ -21,8 +21,9 @@ async function seedDatabase() {
     console.log("Categories may already exist, continuing...");
   }
 
-  // Seed products
+  // Seed more comprehensive products
   const productsData = [
+    // Men's Wear
     {
       id: "prod-1",
       name: "Classic White Tee",
@@ -107,6 +108,107 @@ async function seedDatabase() {
       inStock: true,
       featured: true
     },
+    // Women's Wear  
+    {
+      id: "prod-5",
+      name: "Maxi Dress",
+      slug: "maxi-dress", 
+      description: "Flowing maxi dress perfect for summer occasions. Lightweight fabric with elegant silhouette.",
+      price: "129.00",
+      categoryId: "cat-2",
+      imageUrl: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      sizes: ["XS", "S", "M", "L"],
+      inStock: true,
+      featured: false
+    },
+    {
+      id: "prod-6", 
+      name: "Cashmere Sweater",
+      slug: "cashmere-sweater",
+      description: "Luxurious 100% cashmere sweater with timeless design. Perfect for layering or wearing alone.",
+      price: "249.00",
+      categoryId: "cat-2", 
+      imageUrl: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      sizes: ["XS", "S", "M", "L", "XL"],
+      inStock: true,
+      featured: true
+    },
+    // Footwear
+    {
+      id: "prod-7",
+      name: "Classic Sneakers",
+      slug: "classic-sneakers",
+      description: "Versatile white sneakers perfect for casual wear. Premium leather construction for durability.",
+      price: "89.00",
+      categoryId: "cat-3",
+      imageUrl: "https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      sizes: ["6", "7", "8", "9", "10", "11", "12"],
+      inStock: true,
+      featured: true
+    },
+    {
+      id: "prod-8",
+      name: "High Heels",
+      slug: "high-heels",
+      description: "Elegant high heels for special occasions. Comfortable fit with sophisticated design.",
+      price: "159.00",
+      categoryId: "cat-3",
+      imageUrl: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      sizes: ["5", "6", "7", "8", "9", "10"],
+      inStock: true,
+      featured: false
+    },
+    // Accessories
+    {
+      id: "prod-27",
+      name: "Designer Sunglasses",
+      slug: "designer-sunglasses",
+      description: "Premium sunglasses with UV protection and stylish frame design.",
+      price: "189.00",
+      categoryId: "cat-4",
+      imageUrl: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      sizes: ["One Size"],
+      inStock: true,
+      featured: true
+    },
+    {
+      id: "prod-28",
+      name: "Silk Scarf",
+      slug: "silk-scarf",
+      description: "Luxurious silk scarf with elegant patterns. Perfect finishing touch for any outfit.",
+      price: "79.00",
+      categoryId: "cat-4",
+      imageUrl: "https://images.unsplash.com/photo-1590736969955-00f68b430071?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      sizes: ["One Size"],
+      inStock: true,
+      featured: false
+    },
+    // Outerwear
+    {
+      id: "prod-30",
+      name: "Denim Jacket",
+      slug: "denim-jacket",
+      description: "Classic denim jacket with modern fit. Perfect for layering and casual styling.",
+      price: "129.00",
+      categoryId: "cat-5",
+      imageUrl: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      sizes: ["S", "M", "L", "XL"],
+      inStock: true,
+      featured: false
+    },
+    {
+      id: "prod-31",
+      name: "Trench Coat",
+      slug: "trench-coat",
+      description: "Timeless trench coat with water-resistant fabric. Essential for any wardrobe.",
+      price: "299.00",
+      categoryId: "cat-5",
+      imageUrl: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      sizes: ["S", "M", "L", "XL"],
+      inStock: true,
+      featured: true
+    },
+    // Activewear
     {
       id: "prod-32",
       name: "Athletic Leggings",
@@ -118,6 +220,18 @@ async function seedDatabase() {
       sizes: ["XS", "S", "M", "L", "XL"],
       inStock: true,
       featured: true
+    },
+    {
+      id: "prod-33",
+      name: "Performance Tank",
+      slug: "performance-tank",
+      description: "Breathable tank top designed for intense workouts. Quick-dry technology and comfortable fit.",
+      price: "45.00",
+      categoryId: "cat-6",
+      imageUrl: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+      sizes: ["XS", "S", "M", "L", "XL"],
+      inStock: true,
+      featured: false
     }
   ];
 

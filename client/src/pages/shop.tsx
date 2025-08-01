@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,9 +10,17 @@ export default function Shop() {
   const [location] = useLocation();
   const searchParams = new URLSearchParams(location.split('?')[1] || '');
   
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
+  const categoryFromUrl = searchParams.get('category') || 'all';
+  const saleFromUrl = searchParams.get('sale') === 'true';
+  
+  const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl);
   const [sortBy, setSortBy] = useState('featured');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+  // Update selected category when URL changes
+  useEffect(() => {
+    setSelectedCategory(categoryFromUrl);
+  }, [categoryFromUrl]);
 
   const { data: products = [] } = useQuery<Product[]>({
     queryKey: ["/api/products"],
@@ -25,6 +33,12 @@ export default function Shop() {
   // Filter and sort products
   const filteredProducts = products
     .filter(product => {
+      // Handle sale filter
+      if (saleFromUrl) {
+        return product.featured; // Using featured as sale items for now
+      }
+      
+      // Handle category filter
       if (selectedCategory === 'all') return true;
       const category = categories.find(cat => cat.slug === selectedCategory);
       return product.categoryId === category?.id;
@@ -49,10 +63,14 @@ export default function Shop() {
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-light text-charcoal mb-2" data-testid="shop-title">
-            All Products
+            {saleFromUrl ? 'Sale Items' : 
+             selectedCategory === 'all' ? 'All Products' : 
+             categories.find(cat => cat.slug === selectedCategory)?.name || 'Products'}
           </h1>
           <p className="text-medium-gray" data-testid="shop-subtitle">
-            Discover our complete collection
+            {saleFromUrl ? 'Special offers and featured items' :
+             selectedCategory === 'all' ? 'Discover our complete collection' :
+             categories.find(cat => cat.slug === selectedCategory)?.description || 'Browse our curated selection'}
           </p>
         </div>
         
