@@ -47,13 +47,9 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Debug logging
-      console.log('Key pressed:', event.key, 'Ctrl:', event.ctrlKey, 'Shift:', event.shiftKey);
-      
       // Trigger admin panel with Ctrl+Shift+A (case insensitive)
       if (event.ctrlKey && event.shiftKey && (event.key === 'A' || event.key === 'a')) {
         event.preventDefault();
-        console.log('Admin panel triggered!');
         setShowAdmin(true);
       }
       // Close admin panel with Escape
@@ -71,16 +67,6 @@ function App() {
       <TooltipProvider>
         <div className="min-h-screen flex flex-col" data-testid="app">
           <Navbar />
-          {/* Temporary debug button - remove this later */}
-          <div className="fixed top-4 right-4 z-40">
-            <button
-              onClick={() => setShowAdmin(true)}
-              className="bg-red-500 text-white px-3 py-1 rounded text-xs opacity-50 hover:opacity-100"
-              title="Debug: Open Admin (Ctrl+Shift+A)"
-            >
-              Admin
-            </button>
-          </div>
           <main className="flex-1">
             <Router />
           </main>
