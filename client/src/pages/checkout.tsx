@@ -5,14 +5,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, User } from "lucide-react";
 import { Link } from "wouter";
 import { useCart } from "@/hooks/use-cart";
+import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import AuthModal from "@/components/auth-modal";
 
 export default function Checkout() {
   const { items, getTotalPrice, clearCart } = useCart();
+  const { isAuthenticated } = useAuth();
   const { toast } = useToast();
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   
   const [shippingInfo, setShippingInfo] = useState({
     firstName: "",
@@ -34,6 +38,29 @@ export default function Checkout() {
   const subtotal = getTotalPrice();
   const tax = subtotal * 0.08;
   const total = subtotal + tax;
+
+  // Require authentication for checkout
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen py-12" data-testid="auth-required-checkout">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center py-12">
+            <User className="h-16 w-16 text-medium-gray mx-auto mb-4" />
+            <h1 className="text-3xl font-light text-charcoal mb-4">Sign In Required</h1>
+            <p className="text-medium-gray mb-8">Please sign in to complete your checkout</p>
+            <Button 
+              className="bg-charcoal text-white hover:bg-gray-800" 
+              onClick={() => setIsAuthOpen(true)}
+              data-testid="signin-to-checkout"
+            >
+              Sign In to Continue
+            </Button>
+          </div>
+        </div>
+        <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (

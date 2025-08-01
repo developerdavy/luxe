@@ -1,16 +1,44 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Minus, Plus, Trash2, ArrowLeft } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowLeft, User } from "lucide-react";
 import { Link } from "wouter";
 import { useCart } from "@/hooks/use-cart";
+import { useAuth } from "@/hooks/use-auth";
+import AuthModal from "@/components/auth-modal";
+import { useState } from "react";
 
 export default function Cart() {
-  const { items, updateQuantity, removeItem, getTotalPrice } = useCart();
+  const { items, updateQuantity, removeItem, getTotalPrice, clearCart } = useCart();
+  const { isAuthenticated } = useAuth();
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   const subtotal = getTotalPrice();
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + tax;
+
+  // Redirect to auth if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen py-12" data-testid="auth-required-cart">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center py-12">
+            <User className="h-16 w-16 text-medium-gray mx-auto mb-4" />
+            <h1 className="text-3xl font-light text-charcoal mb-4">Sign In Required</h1>
+            <p className="text-medium-gray mb-8">Please sign in to view and manage your shopping cart</p>
+            <Button 
+              className="bg-charcoal text-white hover:bg-gray-800" 
+              onClick={() => setIsAuthOpen(true)}
+              data-testid="signin-to-view-cart"
+            >
+              Sign In to Continue
+            </Button>
+          </div>
+        </div>
+        <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (

@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Trash2, Edit, Plus, Package, Users, ShoppingCart, DollarSign, Lock } from "lucide-react";
-import { type Product, type Category, insertProductSchema } from "@shared/schema";
+import { type Product, type Category, type User, insertProductSchema } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 
@@ -31,6 +31,11 @@ export default function AdminPage() {
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
+    enabled: isAuthenticated, // Only fetch when authenticated
+  });
+
+  const { data: users = [] } = useQuery<User[]>({
+    queryKey: ["/api/users"],
     enabled: isAuthenticated, // Only fetch when authenticated
   });
 
@@ -176,7 +181,8 @@ export default function AdminPage() {
         <div className="flex space-x-1 mb-8 bg-white rounded-lg p-1">
           {[
             { id: 'overview', label: 'Overview', icon: Package },
-            { id: 'products', label: 'Products', icon: ShoppingCart }
+            { id: 'products', label: 'Products', icon: ShoppingCart },
+            { id: 'users', label: 'Users', icon: Users }
           ].map((tab) => {
             const Icon = tab.icon;
             return (
@@ -476,6 +482,61 @@ export default function AdminPage() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Users Tab */}
+        {selectedTab === 'users' && (
+          <div className="space-y-6" data-testid="admin-users">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  User Management ({users.length} total users)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {users.length > 0 ? (
+                    users.map((user) => (
+                      <div 
+                        key={user.id} 
+                        className="flex items-center justify-between p-4 border rounded-lg"
+                        data-testid={`admin-user-${user.id}`}
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                            <Users className="h-5 w-5 text-gray-600" />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-charcoal">
+                              {user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.username}
+                            </h4>
+                            <p className="text-sm text-medium-gray">{user.email}</p>
+                            <div className="flex items-center space-x-2 mt-1">
+                              {user.isAdmin && (
+                                <Badge className="bg-brand-red text-xs">Admin</Badge>
+                              )}
+                              <Badge variant="outline" className="text-xs">
+                                Joined {new Date(user.createdAt!).toLocaleDateString()}
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-medium-gray">@{user.username}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-medium-gray">No users found</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

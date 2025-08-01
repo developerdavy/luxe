@@ -7,6 +7,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CartModal from "@/components/cart-modal";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 import Home from "@/pages/home";
 import Shop from "@/pages/shop";
@@ -42,8 +43,14 @@ function Router() {
   );
 }
 
-function App() {
+function AppContent() {
   const [showAdmin, setShowAdmin] = useState(false);
+  const { checkAuth } = useAuth();
+
+  // Initialize authentication on app start
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -97,6 +104,10 @@ function App() {
       </TooltipProvider>
     </QueryClientProvider>
   );
+}
+
+function App() {
+  return <AppContent />;
 }
 
 export default App;

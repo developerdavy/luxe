@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Mail, Lock } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -12,24 +14,54 @@ interface AuthModalProps {
 }
 
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const { signIn, signUp, isLoading } = useAuth();
+  const { toast } = useToast();
+  const [error, setError] = useState<string>("");
 
   const handleSignIn = async (formData: FormData) => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    setError("");
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    const result = await signIn(email, password);
+    
+    if (result.success) {
+      toast({ title: "Welcome back!", description: "You've been signed in successfully." });
       onClose();
-    }, 1000);
+    } else {
+      setError(result.message || "Sign in failed");
+    }
   };
 
   const handleSignUp = async (formData: FormData) => {
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    setError("");
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
+    const firstName = formData.get("firstName") as string;
+    const lastName = formData.get("lastName") as string;
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    const username = email.split("@")[0]; // Generate username from email
+
+    const result = await signUp({
+      username,
+      email,
+      password,
+      firstName,
+      lastName,
+    });
+    
+    if (result.success) {
+      toast({ title: "Welcome to LUXE!", description: "Your account has been created successfully." });
       onClose();
-    }, 1000);
+    } else {
+      setError(result.message || "Sign up failed");
+    }
   };
 
   return (
@@ -47,6 +79,12 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <TabsTrigger value="signin">Sign In</TabsTrigger>
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
           </TabsList>
+          
+          {error && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
           
           <TabsContent value="signin" data-testid="signin-tab">
             <form onSubmit={(e) => {

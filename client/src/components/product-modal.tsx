@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Minus, Plus, Truck, RotateCcw, Shield } from "lucide-react";
+import { Minus, Plus, Truck, RotateCcw, Shield, User } from "lucide-react";
 import { type Product } from "@shared/schema";
 import { useCart } from "@/hooks/use-cart";
+import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import AuthModal from "@/components/auth-modal";
 
 interface ProductModalProps {
   product: Product | null;
@@ -16,12 +18,19 @@ interface ProductModalProps {
 export default function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const { addItem } = useCart();
+  const { isAuthenticated } = useAuth();
   const { toast } = useToast();
 
   if (!product) return null;
 
   const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      setIsAuthOpen(true);
+      return;
+    }
+
     if (!selectedSize && product.sizes && product.sizes.length > 0) {
       toast({
         title: "Please select a size",
@@ -169,6 +178,7 @@ export default function ProductModal({ product, isOpen, onClose }: ProductModalP
           </div>
         </div>
       </DialogContent>
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </Dialog>
   );
 }

@@ -1,10 +1,168 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertProductSchema, insertCartItemSchema, insertOrderSchema, insertOrderItemSchema } from "@shared/schema";
+import { insertProductSchema, insertCartItemSchema, insertOrderSchema, insertOrderItemSchema, insertUserSchema, type User } from "@shared/schema";
 import { z } from "zod";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+const JWT_SECRET = process.env.JWT_SECRET || "luxe-secret-key-2025";
+
+// Authentication middleware
+const authenticateToken = async (req: any, res: any, next: any) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: 'Access token required' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const user = await storage.getUser(decoded.userId);
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+    req.user = user;
+    next();
+  } catch (error) {
+    return res.status(403).json({ message: 'Invalid or expired token' });
+  }
+};
+
+// Optional auth middleware - doesn't require authentication but adds user if available
+const optionalAuth = async (req: any, res: any, next: any) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET) as any;
+      const user = await storage.getUser(decoded.userId);
+      if (user) {
+        req.user = user;
+      }
+    } catch (error) {
+      // Ignore invalid tokens for optional auth
+    }
+  }
+  next();
+};
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Authentication routes
+  app.post("/api/auth/signup", async (req, res) => {
+    try {
+      const { username, email, password, firstName, lastName } = req.body;
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(email);
+      if (existingUser) {
+        return res.status(400).json({ message: "User with this email already exists" });
+      }
+
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
+      
+      // Create user
+      const userData = insertUserSchema.parse({
+        username,
+        email,
+        password: hashedPassword,
+        firstName,
+        lastName,
+      });
+      
+      const user = await storage.createUser(userData);
+      
+      // Generate JWT token
+      const token = jwt.sign({ userId: user.id }, JWT_SECRET);
+      
+      // Remove password from response
+      const { password: _, ...userWithoutPassword } = user;
+      
+      res.status(201).json({
+        user: userWithoutPassword,
+        token,
+        message: "Account created successfully"
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid user data", errors: error.errors });
+      }
+      console.error('Signup error:', error);
+      res.status(500).json({ message: "Failed to create account" });
+    }
+  });
+
+  app.post("/api/auth/signin", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      // Find user by email
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      // Check password
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      // Generate JWT token
+      const token = jwt.sign({ userId: user.id }, JWT_SECRET);
+      
+      // Remove password from response
+      const { password: _, ...userWithoutPassword } = user;
+      
+      res.json({
+        user: userWithoutPassword,
+        token,
+        message: "Signed in successfully"
+      });
+    } catch (error) {
+      console.error('Signin error:', error);
+      res.status(500).json({ message: "Failed to sign in" });
+    }
+  });
+
+  app.get("/api/auth/me", authenticateToken, async (req: any, res) => {
+    try {
+      const { password: _, ...userWithoutPassword } = req.user;
+      res.json(userWithoutPassword);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get user info" });
+    }
+  });
+
+  app.post("/api/auth/signout", (req, res) => {
+    // For JWT tokens, signout is handled client-side by removing the token
+    res.json({ message: "Signed out successfully" });
+  });
+
+  // Users management (admin only)
+  app.get("/api/users", authenticateToken, async (req: any, res) => {
+    try {
+      // Check if user is admin
+      if (!req.user.isAdmin) {
+        return res.status(403).json({ message: "Admin access required" });
+      }
+      
+      const users = await storage.getUsers();
+      // Remove passwords from response
+      const usersWithoutPasswords = users.map((user: User) => {
+        const { password: _, ...userWithoutPassword } = user;
+        return userWithoutPassword;
+      });
+      
+      res.json(usersWithoutPasswords);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+
   // Categories
   app.get("/api/categories", async (req, res) => {
     try {

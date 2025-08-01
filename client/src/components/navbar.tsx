@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, User, ShoppingBag, Menu, X, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
+import { useAuth } from "@/hooks/use-auth";
 import SearchModal from "@/components/search-modal";
 import AuthModal from "@/components/auth-modal";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
   const [location] = useLocation();
@@ -12,7 +14,20 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const { getTotalItems, setIsOpen } = useCart();
+  const { user, isAuthenticated, signOut } = useAuth();
   const cartItemsCount = getTotalItems();
+
+  const handleCartClick = () => {
+    if (!isAuthenticated) {
+      setIsAuthOpen(true);
+      return;
+    }
+    setIsOpen(true);
+  };
+
+  const handleSignOut = () => {
+    signOut();
+  };
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -71,21 +86,45 @@ export default function Navbar() {
               <Search className="h-4 w-4 md:h-5 md:w-5" />
             </Button>
             
-            <Button 
-              variant="ghost" 
-              size="icon"
-              className="text-charcoal hover:text-brand-red"
-              onClick={() => setIsAuthOpen(true)}
-              data-testid="auth-button"
-            >
-              <User className="h-4 w-4 md:h-5 md:w-5" />
-            </Button>
+            {isAuthenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="text-charcoal hover:text-brand-red"
+                    data-testid="user-menu-button"
+                  >
+                    <User className="h-4 w-4 md:h-5 md:w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem disabled className="font-medium">
+                    {user?.firstName || user?.username}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="text-charcoal hover:text-brand-red"
+                onClick={() => setIsAuthOpen(true)}
+                data-testid="auth-button"
+              >
+                <User className="h-4 w-4 md:h-5 md:w-5" />
+              </Button>
+            )}
             
             <Button 
               variant="ghost" 
               size="icon"
               className="relative text-charcoal hover:text-brand-red"
-              onClick={() => setIsOpen(true)}
+              onClick={handleCartClick}
               data-testid="cart-button"
             >
               <ShoppingBag className="h-5 w-5" />
