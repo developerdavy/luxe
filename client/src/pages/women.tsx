@@ -46,22 +46,22 @@ export default function WomenPage() {
   }
 
   return (
-    <div className="py-12" data-testid="women-page">
+    <div className="py-8 sm:py-12" data-testid="women-page">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-light text-charcoal mb-2" data-testid="women-title">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-light text-charcoal mb-2" data-testid="women-title">
             Women's Wear
           </h1>
-          <p className="text-medium-gray" data-testid="women-subtitle">
+          <p className="text-sm sm:text-base text-medium-gray" data-testid="women-subtitle">
             Elegant designs for every occasion
           </p>
         </div>
         
         {/* Sort */}
-        <div className="flex justify-end mb-8">
+        <div className="flex justify-center sm:justify-end mb-6 sm:mb-8">
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-48" data-testid="sort-filter">
+            <SelectTrigger className="w-full sm:w-48" data-testid="sort-filter">
               <SelectValue placeholder="Sort by: Featured" />
             </SelectTrigger>
             <SelectContent>
@@ -74,7 +74,7 @@ export default function WomenPage() {
         </div>
         
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" data-testid="products-grid">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8" data-testid="products-grid">
           {filteredProducts.map((product) => (
             <ProductCard 
               key={product.id} 

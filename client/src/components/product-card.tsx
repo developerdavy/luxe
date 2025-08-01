@@ -15,14 +15,20 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
     >
       <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
         <Link href={`/product/${product.slug}`}>
-          <img 
-            src={product.imageUrl || ''} 
-            alt={product.name} 
-            className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
-            data-testid={`product-image-${product.id}`}
-          />
+          <div className="relative w-full h-64 sm:h-72 md:h-80 overflow-hidden bg-gray-100">
+            <img 
+              src={product.imageUrl || ''} 
+              alt={product.name} 
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              data-testid={`product-image-${product.id}`}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
+              }}
+              loading="lazy"
+            />
+          </div>
         </Link>
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <Link href={`/product/${product.slug}`}>
             <h3 
               className="text-lg font-medium text-charcoal mb-2 hover:text-brand-red transition-colors"
@@ -37,9 +43,9 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
           >
             {product.description}
           </p>
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
             <p 
-              className="text-xl font-semibold text-charcoal"
+              className="text-lg sm:text-xl font-semibold text-charcoal"
               data-testid={`product-price-${product.id}`}
             >
               ${product.price}
@@ -52,7 +58,7 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
                   e.preventDefault();
                   onQuickView(product);
                 }}
-                className="text-brand-red hover:text-red-700 font-medium"
+                className="text-brand-red hover:text-red-700 font-medium text-sm sm:text-base"
                 data-testid={`quick-view-${product.id}`}
               >
                 Quick View
