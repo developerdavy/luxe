@@ -201,6 +201,191 @@ export class MemStorage implements IStorage {
         inStock: true,
         featured: false,
         createdAt: new Date()
+      },
+      // Additional Men's Wear Products
+      {
+        id: "prod-11",
+        name: "Oxford Dress Shirt",
+        slug: "oxford-dress-shirt",
+        description: "Premium cotton oxford dress shirt with classic collar. Perfect for business and formal occasions.",
+        price: "79.00",
+        categoryId: "cat-1",
+        imageUrl: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["S", "M", "L", "XL", "XXL"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-12",
+        name: "Chino Pants",
+        slug: "chino-pants",
+        description: "Versatile cotton chino pants with modern fit. Essential for smart-casual wardrobe.",
+        price: "69.00",
+        categoryId: "cat-1",
+        imageUrl: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["28", "30", "32", "34", "36", "38"],
+        inStock: true,
+        featured: true,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-13",
+        name: "Leather Jacket",
+        slug: "leather-jacket",
+        description: "Genuine leather motorcycle jacket with classic design. Timeless piece for any wardrobe.",
+        price: "299.00",
+        categoryId: "cat-1",
+        imageUrl: "https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["S", "M", "L", "XL"],
+        inStock: true,
+        featured: true,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-14",
+        name: "Polo Shirt",
+        slug: "polo-shirt",
+        description: "Classic cotton polo shirt with ribbed collar and cuffs. Available in multiple colors.",
+        price: "49.00",
+        categoryId: "cat-1",
+        imageUrl: "https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["S", "M", "L", "XL", "XXL"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
+      },
+      // Additional Women's Wear Products
+      {
+        id: "prod-15",
+        name: "Maxi Dress",
+        slug: "maxi-dress",
+        description: "Flowing maxi dress with floral print. Perfect for summer occasions and beach getaways.",
+        price: "89.00",
+        categoryId: "cat-2",
+        imageUrl: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["XS", "S", "M", "L", "XL"],
+        inStock: true,
+        featured: true,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-16",
+        name: "Cashmere Sweater",
+        slug: "cashmere-sweater",
+        description: "Luxurious 100% cashmere sweater with crew neck. Ultra-soft and perfect for layering.",
+        price: "189.00",
+        categoryId: "cat-2",
+        imageUrl: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["XS", "S", "M", "L"],
+        inStock: true,
+        featured: true,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-17",
+        name: "High-Waist Jeans",
+        slug: "high-waist-jeans",
+        description: "Vintage-inspired high-waist jeans with straight leg cut. Made from premium denim.",
+        price: "119.00",
+        categoryId: "cat-2",
+        imageUrl: "https://images.unsplash.com/photo-1541840031508-326b77c9a17e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["24", "26", "28", "30", "32"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-18",
+        name: "Wrap Blouse",
+        slug: "wrap-blouse",
+        description: "Elegant wrap blouse with tie waist. Versatile piece that transitions from day to night.",
+        price: "79.00",
+        categoryId: "cat-2",
+        imageUrl: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["XS", "S", "M", "L", "XL"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-19",
+        name: "Midi Skirt",
+        slug: "midi-skirt",
+        description: "A-line midi skirt with pleated design. Classic piece perfect for office or evening wear.",
+        price: "69.00",
+        categoryId: "cat-2",
+        imageUrl: "https://images.unsplash.com/photo-1583496661160-fb5886a13d06?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["XS", "S", "M", "L", "XL"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
+      },
+      // Additional Footwear Products
+      {
+        id: "prod-20",
+        name: "High Heels",
+        slug: "high-heels",
+        description: "Classic pointed-toe high heels in patent leather. Essential for formal occasions.",
+        price: "139.00",
+        categoryId: "cat-3",
+        imageUrl: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10"],
+        inStock: true,
+        featured: true,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-21",
+        name: "Canvas Sneakers",
+        slug: "canvas-sneakers",
+        description: "Casual canvas sneakers with rubber sole. Perfect for everyday wear and weekend activities.",
+        price: "69.00",
+        categoryId: "cat-3",
+        imageUrl: "https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["6", "7", "8", "9", "10", "11", "12"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-22",
+        name: "Ankle Boots",
+        slug: "ankle-boots",
+        description: "Stylish ankle boots with block heel. Versatile footwear that pairs well with any outfit.",
+        price: "179.00",
+        categoryId: "cat-3",
+        imageUrl: "https://images.unsplash.com/photo-1608256246200-53e8b47b4fa1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-23",
+        name: "Dress Shoes",
+        slug: "dress-shoes",
+        description: "Formal oxford dress shoes in genuine leather. Perfect for business and special occasions.",
+        price: "229.00",
+        categoryId: "cat-3",
+        imageUrl: "https://images.unsplash.com/photo-1614252369475-531eba835eb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["7", "8", "9", "10", "11", "12"],
+        inStock: true,
+        featured: true,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-24",
+        name: "Sandals",
+        slug: "sandals",
+        description: "Comfortable leather sandals with adjustable straps. Perfect for summer and casual wear.",
+        price: "89.00",
+        categoryId: "cat-3",
+        imageUrl: "https://images.unsplash.com/photo-1603808033192-082d6919d3e1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["6", "7", "8", "9", "10", "11"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
       }
     ];
 
@@ -222,7 +407,9 @@ export class MemStorage implements IStorage {
       ...insertUser, 
       id, 
       isAdmin: false,
-      createdAt: new Date() 
+      createdAt: new Date(),
+      firstName: insertUser.firstName || null,
+      lastName: insertUser.lastName || null
     };
     this.users.set(id, user);
     return user;
@@ -239,7 +426,12 @@ export class MemStorage implements IStorage {
 
   async createCategory(insertCategory: InsertCategory): Promise<Category> {
     const id = randomUUID();
-    const category: Category = { ...insertCategory, id };
+    const category: Category = { 
+      ...insertCategory, 
+      id,
+      description: insertCategory.description || null,
+      imageUrl: insertCategory.imageUrl || null
+    };
     this.categories.set(id, category);
     return category;
   }
@@ -272,7 +464,13 @@ export class MemStorage implements IStorage {
     const product: Product = { 
       ...insertProduct, 
       id, 
-      createdAt: new Date() 
+      createdAt: new Date(),
+      sizes: insertProduct.sizes || null,
+      description: insertProduct.description || null,
+      imageUrl: insertProduct.imageUrl || null,
+      categoryId: insertProduct.categoryId || null,
+      featured: insertProduct.featured || null,
+      inStock: insertProduct.inStock || null
     };
     this.products.set(id, product);
     return product;
@@ -291,6 +489,10 @@ export class MemStorage implements IStorage {
     return this.products.delete(id);
   }
 
+  async deleteProduct(id: string): Promise<boolean> {
+    return this.products.delete(id);
+  }
+
   // Cart
   async getCartItems(userId: string): Promise<CartItem[]> {
     return Array.from(this.cartItems.values()).filter(item => item.userId === userId);
@@ -301,7 +503,11 @@ export class MemStorage implements IStorage {
     const cartItem: CartItem = { 
       ...insertCartItem, 
       id, 
-      createdAt: new Date() 
+      createdAt: new Date(),
+      size: insertCartItem.size || null,
+      userId: insertCartItem.userId || null,
+      productId: insertCartItem.productId || null,
+      quantity: insertCartItem.quantity || 1
     };
     this.cartItems.set(id, cartItem);
     return cartItem;
@@ -347,7 +553,10 @@ export class MemStorage implements IStorage {
     const order: Order = { 
       ...insertOrder, 
       id, 
-      createdAt: new Date() 
+      createdAt: new Date(),
+      status: insertOrder.status || "pending",
+      userId: insertOrder.userId || null,
+      shippingAddress: insertOrder.shippingAddress || null
     };
     this.orders.set(id, order);
     return order;
@@ -359,7 +568,13 @@ export class MemStorage implements IStorage {
 
   async addOrderItem(insertOrderItem: InsertOrderItem): Promise<OrderItem> {
     const id = randomUUID();
-    const orderItem: OrderItem = { ...insertOrderItem, id };
+    const orderItem: OrderItem = { 
+      ...insertOrderItem, 
+      id,
+      size: insertOrderItem.size || null,
+      productId: insertOrderItem.productId || null,
+      orderId: insertOrderItem.orderId || null
+    };
     this.orderItems.set(id, orderItem);
     return orderItem;
   }

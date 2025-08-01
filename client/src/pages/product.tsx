@@ -18,6 +18,7 @@ export default function ProductPage() {
 
   const { data: product, isLoading } = useQuery<Product>({
     queryKey: ["/api/products/slug", params?.slug],
+    queryFn: () => fetch(`/api/products/slug/${params?.slug}`).then(res => res.json()),
     enabled: !!params?.slug,
   });
 

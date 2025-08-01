@@ -12,6 +12,7 @@ import Shop from "@/pages/shop";
 import ProductPage from "@/pages/product";
 import Cart from "@/pages/cart";
 import Checkout from "@/pages/checkout";
+import AdminPage from "@/pages/admin";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/product/:slug" component={ProductPage} />
       <Route path="/cart" component={Cart} />
       <Route path="/checkout" component={Checkout} />
+      <Route path="/admin-dashboard-luxe-secret" component={AdminPage} />
       <Route component={NotFound} />
     </Switch>
   );

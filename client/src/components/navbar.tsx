@@ -3,10 +3,14 @@ import { Link, useLocation } from "wouter";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/use-cart";
+import SearchModal from "@/components/search-modal";
+import AuthModal from "@/components/auth-modal";
 
 export default function Navbar() {
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const { getTotalItems, setIsOpen } = useCart();
   const cartItemsCount = getTotalItems();
 
@@ -33,37 +37,39 @@ export default function Navbar() {
             <div className="ml-10 flex items-baseline space-x-8">
               {navLinks.map((link) => (
                 <Link key={link.href} href={link.href}>
-                  <a 
-                    className={`text-charcoal hover:text-brand-red transition-colors duration-200 font-medium ${
+                  <span 
+                    className={`text-charcoal hover:text-brand-red transition-colors duration-200 font-medium cursor-pointer ${
                       location === link.href ? 'text-brand-red' : ''
                     } ${link.className || ''}`}
                     data-testid={`nav-link-${link.label.toLowerCase()}`}
                   >
                     {link.label}
-                  </a>
+                  </span>
                 </Link>
               ))}
             </div>
           </div>
           
           {/* Right side icons */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             <Button 
               variant="ghost" 
               size="icon"
               className="text-charcoal hover:text-brand-red"
+              onClick={() => setIsSearchOpen(true)}
               data-testid="search-button"
             >
-              <Search className="h-5 w-5" />
+              <Search className="h-4 w-4 md:h-5 md:w-5" />
             </Button>
             
             <Button 
               variant="ghost" 
               size="icon"
               className="text-charcoal hover:text-brand-red"
+              onClick={() => setIsAuthOpen(true)}
               data-testid="auth-button"
             >
-              <User className="h-5 w-5" />
+              <User className="h-4 w-4 md:h-5 md:w-5" />
             </Button>
             
             <Button 
@@ -104,20 +110,24 @@ export default function Navbar() {
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}>
-                <a 
-                  className={`block px-3 py-2 text-charcoal hover:text-brand-red font-medium ${
+                <span 
+                  className={`block px-3 py-2 text-charcoal hover:text-brand-red font-medium cursor-pointer ${
                     location === link.href ? 'text-brand-red' : ''
                   } ${link.className || ''}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                   data-testid={`mobile-nav-link-${link.label.toLowerCase()}`}
                 >
                   {link.label}
-                </a>
+                </span>
               </Link>
             ))}
           </div>
         </div>
       )}
+      
+      {/* Modals */}
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </nav>
   );
 }
