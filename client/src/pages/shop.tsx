@@ -13,14 +13,11 @@ export default function Shop() {
   const categoryFromUrl = searchParams.get('category') || 'all';
   const saleFromUrl = searchParams.get('sale') === 'true';
   
-  const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl);
   const [sortBy, setSortBy] = useState('featured');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  // Update selected category when URL changes
-  useEffect(() => {
-    setSelectedCategory(categoryFromUrl);
-  }, [categoryFromUrl]);
+  // Use URL parameters directly instead of local state
+  const selectedCategory = categoryFromUrl;
 
   const { data: products = [] } = useQuery<Product[]>({
     queryKey: ["/api/products"],
@@ -41,7 +38,7 @@ export default function Shop() {
       // Handle category filter
       if (selectedCategory === 'all') return true;
       const category = categories.find(cat => cat.slug === selectedCategory);
-      // console.log('Filtering:', { selectedCategory, category, productCategoryId: product.categoryId });
+      // Debug filtering
       return product.categoryId === category?.id;
     })
     .sort((a, b) => {
@@ -78,7 +75,13 @@ export default function Shop() {
         {/* Filters and Sort */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 space-y-4 md:space-y-0">
           <div className="flex flex-wrap gap-4">
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <Select value={selectedCategory} onValueChange={(value) => {
+              if (value === 'all') {
+                window.location.href = '/shop';
+              } else {
+                window.location.href = `/shop?category=${value}`;
+              }
+            }}>
               <SelectTrigger className="w-48" data-testid="category-filter">
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
@@ -106,6 +109,19 @@ export default function Shop() {
           </Select>
         </div>
         
+        {/* Debug Info */}
+        <div className="mb-4 p-4 bg-gray-100 rounded text-sm">
+          <p>URL: {location}</p>
+          <p>Selected Category: {selectedCategory}</p>
+          <p>Sale Mode: {saleFromUrl ? 'Yes' : 'No'}</p>
+          <p>Total Products: {products.length}</p>
+          <p>Filtered Products: {filteredProducts.length}</p>
+          <p>Categories Loaded: {categories.length}</p>
+          {categories.length > 0 && (
+            <p>Available Category Slugs: {categories.map(c => c.slug).join(', ')}</p>
+          )}
+        </div>
+
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" data-testid="products-grid">
           {filteredProducts.map((product) => (
