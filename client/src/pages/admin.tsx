@@ -23,65 +23,15 @@ export default function AdminPage() {
 
   const { toast } = useToast();
 
-  // Check if already authenticated from sessionStorage
-  useEffect(() => {
-    const isAuth = sessionStorage.getItem('admin-authenticated') === 'true';
-    if (isAuth) {
-      setIsAuthenticated(true);
-      setShowPasswordDialog(false);
-    }
-  }, []);
-  
-  const handleAdminLogin = () => {
-    // Simple password check - in production, this should be server-side
-    if (adminPassword === "luxe-admin-2025") {
-      setIsAuthenticated(true);
-      setShowPasswordDialog(false);
-      sessionStorage.setItem('admin-authenticated', 'true');
-      toast({ title: "Welcome to LUXE Admin Dashboard" });
-    } else {
-      toast({ title: "Invalid password", variant: "destructive" });
-      setAdminPassword("");
-    }
-  };
-
-  // If not authenticated, show password dialog
-  if (!isAuthenticated) {
-    return (
-      <Dialog open={showPasswordDialog} onOpenChange={() => {}}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Lock className="h-5 w-5" />
-              Admin Access Required
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <p className="text-sm text-gray-600">
-              Enter the admin password to access the dashboard.
-            </p>
-            <Input
-              type="password"
-              placeholder="Admin password"
-              value={adminPassword}
-              onChange={(e) => setAdminPassword(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleAdminLogin()}
-            />
-            <Button onClick={handleAdminLogin} className="w-full">
-              Access Dashboard
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
+  // Always call hooks at the top level - never conditionally
   const { data: products = [] } = useQuery<Product[]>({
     queryKey: ["/api/products"],
+    enabled: isAuthenticated, // Only fetch when authenticated
   });
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
+    enabled: isAuthenticated, // Only fetch when authenticated
   });
 
   const addProductMutation = useMutation({
@@ -132,6 +82,28 @@ export default function AdminPage() {
     }
   });
 
+  // Check if already authenticated from sessionStorage
+  useEffect(() => {
+    const isAuth = sessionStorage.getItem('admin-authenticated') === 'true';
+    if (isAuth) {
+      setIsAuthenticated(true);
+      setShowPasswordDialog(false);
+    }
+  }, []);
+  
+  const handleAdminLogin = () => {
+    // Simple password check - in production, this should be server-side
+    if (adminPassword === "luxe-admin-2025") {
+      setIsAuthenticated(true);
+      setShowPasswordDialog(false);
+      sessionStorage.setItem('admin-authenticated', 'true');
+      toast({ title: "Welcome to LUXE Admin Dashboard" });
+    } else {
+      toast({ title: "Invalid password", variant: "destructive" });
+      setAdminPassword("");
+    }
+  };
+
   const handleSubmitProduct = (formData: FormData) => {
     const productData = {
       name: formData.get('name') as string,
@@ -158,6 +130,37 @@ export default function AdminPage() {
     totalRevenue: products.reduce((sum, p) => sum + parseFloat(p.price), 0),
     avgPrice: products.length > 0 ? products.reduce((sum, p) => sum + parseFloat(p.price), 0) / products.length : 0
   };
+
+  // If not authenticated, show password dialog
+  if (!isAuthenticated) {
+    return (
+      <Dialog open={showPasswordDialog} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Lock className="h-5 w-5" />
+              Admin Access Required
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">
+              Enter the admin password to access the dashboard.
+            </p>
+            <Input
+              type="password"
+              placeholder="Admin password"
+              value={adminPassword}
+              onChange={(e) => setAdminPassword(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleAdminLogin()}
+            />
+            <Button onClick={handleAdminLogin} className="w-full">
+              Access Dashboard
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   return (
     <div className="p-6" data-testid="admin-page">
