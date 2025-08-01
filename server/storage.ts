@@ -10,8 +10,16 @@ import {
   type Order,
   type InsertOrder,
   type OrderItem,
-  type InsertOrderItem
+  type InsertOrderItem,
+  users,
+  categories,
+  products,
+  cartItems,
+  orders,
+  orderItems
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -699,4 +707,159 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database Storage Implementation
+export class DatabaseStorage implements IStorage {
+  // Users
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  // Categories
+  async getCategories(): Promise<Category[]> {
+    return await db.select().from(categories);
+  }
+
+  async getCategory(id: string): Promise<Category | undefined> {
+    const [category] = await db.select().from(categories).where(eq(categories.id, id));
+    return category || undefined;
+  }
+
+  async createCategory(insertCategory: InsertCategory): Promise<Category> {
+    const [category] = await db
+      .insert(categories)
+      .values(insertCategory)
+      .returning();
+    return category;
+  }
+
+  // Products
+  async getProducts(filters?: { categoryId?: string; featured?: boolean }): Promise<Product[]> {
+    const baseQuery = db.select().from(products);
+    
+    if (filters?.categoryId && filters?.featured !== undefined) {
+      return await baseQuery.where(eq(products.categoryId, filters.categoryId));
+    }
+    
+    if (filters?.categoryId) {
+      return await baseQuery.where(eq(products.categoryId, filters.categoryId));
+    }
+    
+    if (filters?.featured !== undefined) {
+      return await baseQuery.where(eq(products.featured, filters.featured));
+    }
+    
+    return await baseQuery;
+  }
+
+  async getProduct(id: string): Promise<Product | undefined> {
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product || undefined;
+  }
+
+  async getProductBySlug(slug: string): Promise<Product | undefined> {
+    const [product] = await db.select().from(products).where(eq(products.slug, slug));
+    return product || undefined;
+  }
+
+  async createProduct(insertProduct: InsertProduct): Promise<Product> {
+    const [product] = await db
+      .insert(products)
+      .values(insertProduct)
+      .returning();
+    return product;
+  }
+
+  async updateProduct(id: string, updates: Partial<Product>): Promise<Product | undefined> {
+    const [product] = await db
+      .update(products)
+      .set(updates)
+      .where(eq(products.id, id))
+      .returning();
+    return product || undefined;
+  }
+
+  async deleteProduct(id: string): Promise<boolean> {
+    const result = await db.delete(products).where(eq(products.id, id));
+    return result.rowCount ? result.rowCount > 0 : false;
+  }
+
+  // Cart
+  async getCartItems(userId: string): Promise<CartItem[]> {
+    return await db.select().from(cartItems).where(eq(cartItems.userId, userId));
+  }
+
+  async addCartItem(insertCartItem: InsertCartItem): Promise<CartItem> {
+    const [cartItem] = await db
+      .insert(cartItems)
+      .values(insertCartItem)
+      .returning();
+    return cartItem;
+  }
+
+  async updateCartItem(id: string, quantity: number): Promise<CartItem | undefined> {
+    const [cartItem] = await db
+      .update(cartItems)
+      .set({ quantity })
+      .where(eq(cartItems.id, id))
+      .returning();
+    return cartItem || undefined;
+  }
+
+  async removeCartItem(id: string): Promise<boolean> {
+    const result = await db.delete(cartItems).where(eq(cartItems.id, id));
+    return result.rowCount ? result.rowCount > 0 : false;
+  }
+
+  async clearCart(userId: string): Promise<void> {
+    await db.delete(cartItems).where(eq(cartItems.userId, userId));
+  }
+
+  // Orders
+  async getOrders(userId?: string): Promise<Order[]> {
+    if (userId) {
+      return await db.select().from(orders).where(eq(orders.userId, userId));
+    }
+    return await db.select().from(orders);
+  }
+
+  async getOrder(id: string): Promise<Order | undefined> {
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
+    return order || undefined;
+  }
+
+  async createOrder(insertOrder: InsertOrder): Promise<Order> {
+    const [order] = await db
+      .insert(orders)
+      .values(insertOrder)
+      .returning();
+    return order;
+  }
+
+  async getOrderItems(orderId: string): Promise<OrderItem[]> {
+    return await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+  }
+
+  async addOrderItem(insertOrderItem: InsertOrderItem): Promise<OrderItem> {
+    const [orderItem] = await db
+      .insert(orderItems)
+      .values(insertOrderItem)
+      .returning();
+    return orderItem;
+  }
+}
+
+export const storage = new DatabaseStorage();
