@@ -17,30 +17,18 @@ export default function Navbar() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/shop", label: "Shop" },
-    { href: "/shop?category=mens-wear", label: "Men" },
-    { href: "/shop?category=womens-wear", label: "Women" },
-    { href: "/shop?category=footwear", label: "Footwear" },
-    { href: "/shop?category=accessories", label: "Accessories" },
-    { href: "/shop?category=outerwear", label: "Outerwear" },
-    { href: "/shop?sale=true", label: "Sale", className: "text-brand-red" }
+    { href: "/men", label: "Men" },
+    { href: "/women", label: "Women" },
+    { href: "/footwear", label: "Footwear" },
+    { href: "/accessories", label: "Accessories" },
+    { href: "/outerwear", label: "Outerwear" },
+    { href: "/sale", label: "Sale", className: "text-brand-red" }
   ];
 
-  // Better page matching logic
+  // Simple page matching logic for dedicated pages
   const isActiveLink = (href: string) => {
     if (href === "/" && location === "/") return true;
-    if (href !== "/" && location.startsWith(href.split('?')[0])) {
-      // For query-based links, check if URL contains the query
-      const [path, query] = href.split('?');
-      if (query && location.includes('?')) {
-        const currentQuery = new URLSearchParams(location.split('?')[1]);
-        const linkQuery = new URLSearchParams(query);
-        const entries = Array.from(linkQuery.entries());
-        for (const [key, value] of entries) {
-          if (currentQuery.get(key) === value) return true;
-        }
-      }
-      return !query; // If no query, match by path only
-    }
+    if (href !== "/" && location === href) return true;
     return false;
   };
 

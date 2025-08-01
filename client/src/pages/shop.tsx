@@ -109,18 +109,7 @@ export default function Shop() {
           </Select>
         </div>
         
-        {/* Debug Info */}
-        <div className="mb-4 p-4 bg-gray-100 rounded text-sm">
-          <p>URL: {location}</p>
-          <p>Selected Category: {selectedCategory}</p>
-          <p>Sale Mode: {saleFromUrl ? 'Yes' : 'No'}</p>
-          <p>Total Products: {products.length}</p>
-          <p>Filtered Products: {filteredProducts.length}</p>
-          <p>Categories Loaded: {categories.length}</p>
-          {categories.length > 0 && (
-            <p>Available Category Slugs: {categories.map(c => c.slug).join(', ')}</p>
-          )}
-        </div>
+
 
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" data-testid="products-grid">
