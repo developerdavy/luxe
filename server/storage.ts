@@ -65,7 +65,10 @@ export class MemStorage implements IStorage {
     const categories = [
       { id: "cat-1", name: "Men's Wear", slug: "mens-wear", description: "Contemporary styles for the modern man", imageUrl: "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
       { id: "cat-2", name: "Women's Wear", slug: "womens-wear", description: "Elegant designs for every occasion", imageUrl: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
-      { id: "cat-3", name: "Footwear", slug: "footwear", description: "Step up your style game", imageUrl: "https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }
+      { id: "cat-3", name: "Footwear", slug: "footwear", description: "Step up your style game", imageUrl: "https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+      { id: "cat-4", name: "Accessories", slug: "accessories", description: "Complete your look with premium accessories", imageUrl: "https://images.unsplash.com/photo-1523170335258-f5c6c6bd6edb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+      { id: "cat-5", name: "Outerwear", slug: "outerwear", description: "Stay stylish in all weather conditions", imageUrl: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" },
+      { id: "cat-6", name: "Activewear", slug: "activewear", description: "Performance meets style", imageUrl: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" }
     ];
 
     categories.forEach(cat => this.categories.set(cat.id, cat));
@@ -386,6 +389,126 @@ export class MemStorage implements IStorage {
         inStock: true,
         featured: false,
         createdAt: new Date()
+      },
+      // Accessories Products
+      {
+        id: "prod-25",
+        name: "Leather Belt",
+        slug: "leather-belt",
+        description: "Premium genuine leather belt with sleek metal buckle. Perfect finishing touch for any outfit.",
+        price: "79.00",
+        categoryId: "cat-4",
+        imageUrl: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["S", "M", "L", "XL"],
+        inStock: true,
+        featured: true,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-26",
+        name: "Luxury Watch",
+        slug: "luxury-watch",
+        description: "Elegant timepiece with Swiss movement and sapphire crystal. Sophisticated accessory for the discerning individual.",
+        price: "399.00",
+        categoryId: "cat-4",
+        imageUrl: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["One Size"],
+        inStock: true,
+        featured: true,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-27",
+        name: "Designer Sunglasses",
+        slug: "designer-sunglasses",
+        description: "Premium polarized sunglasses with UV protection. Classic aviator style with modern updates.",
+        price: "189.00",
+        categoryId: "cat-4",
+        imageUrl: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["One Size"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-28",
+        name: "Silk Scarf",
+        slug: "silk-scarf",
+        description: "100% mulberry silk scarf with elegant pattern. Versatile accessory for all seasons.",
+        price: "129.00",
+        categoryId: "cat-4",
+        imageUrl: "https://images.unsplash.com/photo-1601924638867-985639c3c887?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["One Size"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
+      },
+      // Outerwear Products
+      {
+        id: "prod-29",
+        name: "Wool Coat",
+        slug: "wool-coat",
+        description: "Classic wool overcoat with timeless design. Perfect for cold weather and formal occasions.",
+        price: "359.00",
+        categoryId: "cat-5",
+        imageUrl: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["S", "M", "L", "XL"],
+        inStock: true,
+        featured: true,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-30",
+        name: "Puffer Jacket",
+        slug: "puffer-jacket",
+        description: "Lightweight down-filled jacket with water-resistant coating. Essential for cold weather adventures.",
+        price: "199.00",
+        categoryId: "cat-5",
+        imageUrl: "https://images.unsplash.com/photo-1551028719-00167b16eac5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["XS", "S", "M", "L", "XL"],
+        inStock: true,
+        featured: true,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-31",
+        name: "Trench Coat",
+        slug: "trench-coat",
+        description: "Classic trench coat with double-breasted design and belt. Iconic piece for sophisticated wardrobes.",
+        price: "289.00",
+        categoryId: "cat-5",
+        imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["XS", "S", "M", "L", "XL"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
+      },
+      // Activewear Products
+      {
+        id: "prod-32",
+        name: "Athletic Leggings",
+        slug: "athletic-leggings",
+        description: "High-performance leggings with moisture-wicking fabric and compression fit. Perfect for workouts.",
+        price: "79.00",
+        categoryId: "cat-6",
+        imageUrl: "https://images.unsplash.com/photo-1506629905607-c7a0b43ac012?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["XS", "S", "M", "L", "XL"],
+        inStock: true,
+        featured: true,
+        createdAt: new Date()
+      },
+      {
+        id: "prod-33",
+        name: "Sports Bra",
+        slug: "sports-bra",
+        description: "Medium support sports bra with seamless construction. Comfortable and supportive for all activities.",
+        price: "49.00",
+        categoryId: "cat-6",
+        imageUrl: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        sizes: ["XS", "S", "M", "L", "XL"],
+        inStock: true,
+        featured: false,
+        createdAt: new Date()
       }
     ];
 
@@ -483,10 +606,6 @@ export class MemStorage implements IStorage {
     const updatedProduct = { ...product, ...updates };
     this.products.set(id, updatedProduct);
     return updatedProduct;
-  }
-
-  async deleteProduct(id: string): Promise<boolean> {
-    return this.products.delete(id);
   }
 
   async deleteProduct(id: string): Promise<boolean> {

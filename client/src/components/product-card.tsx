@@ -15,25 +15,21 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
     >
       <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
         <Link href={`/product/${product.slug}`}>
-          <a>
-            <img 
-              src={product.imageUrl || ''} 
-              alt={product.name} 
-              className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
-              data-testid={`product-image-${product.id}`}
-            />
-          </a>
+          <img 
+            src={product.imageUrl || ''} 
+            alt={product.name} 
+            className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
+            data-testid={`product-image-${product.id}`}
+          />
         </Link>
         <div className="p-6">
           <Link href={`/product/${product.slug}`}>
-            <a>
-              <h3 
-                className="text-lg font-medium text-charcoal mb-2 hover:text-brand-red transition-colors"
-                data-testid={`product-name-${product.id}`}
-              >
-                {product.name}
-              </h3>
-            </a>
+            <h3 
+              className="text-lg font-medium text-charcoal mb-2 hover:text-brand-red transition-colors"
+              data-testid={`product-name-${product.id}`}
+            >
+              {product.name}
+            </h3>
           </Link>
           <p 
             className="text-medium-gray text-sm mb-3"

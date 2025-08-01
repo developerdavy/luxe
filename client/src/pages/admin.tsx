@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,16 +7,74 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, Edit, Plus, Package, Users, ShoppingCart, DollarSign } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Trash2, Edit, Plus, Package, Users, ShoppingCart, DollarSign, Lock } from "lucide-react";
 import { type Product, type Category, insertProductSchema } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 
 export default function AdminPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [showPasswordDialog, setShowPasswordDialog] = useState(true);
   const [selectedTab, setSelectedTab] = useState("overview");
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
   const { toast } = useToast();
+
+  // Check if already authenticated from sessionStorage
+  useEffect(() => {
+    const isAuth = sessionStorage.getItem('admin-authenticated') === 'true';
+    if (isAuth) {
+      setIsAuthenticated(true);
+      setShowPasswordDialog(false);
+    }
+  }, []);
+  
+  const handleAdminLogin = () => {
+    // Simple password check - in production, this should be server-side
+    if (adminPassword === "luxe-admin-2025") {
+      setIsAuthenticated(true);
+      setShowPasswordDialog(false);
+      sessionStorage.setItem('admin-authenticated', 'true');
+      toast({ title: "Welcome to LUXE Admin Dashboard" });
+    } else {
+      toast({ title: "Invalid password", variant: "destructive" });
+      setAdminPassword("");
+    }
+  };
+
+  // If not authenticated, show password dialog
+  if (!isAuthenticated) {
+    return (
+      <Dialog open={showPasswordDialog} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Lock className="h-5 w-5" />
+              Admin Access Required
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">
+              Enter the admin password to access the dashboard.
+            </p>
+            <Input
+              type="password"
+              placeholder="Admin password"
+              value={adminPassword}
+              onChange={(e) => setAdminPassword(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleAdminLogin()}
+            />
+            <Button onClick={handleAdminLogin} className="w-full">
+              Access Dashboard
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   const { data: products = [] } = useQuery<Product[]>({
     queryKey: ["/api/products"],

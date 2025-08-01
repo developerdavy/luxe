@@ -20,8 +20,29 @@ export default function Navbar() {
     { href: "/shop?category=mens-wear", label: "Men" },
     { href: "/shop?category=womens-wear", label: "Women" },
     { href: "/shop?category=footwear", label: "Footwear" },
+    { href: "/shop?category=accessories", label: "Accessories" },
+    { href: "/shop?category=outerwear", label: "Outerwear" },
     { href: "/shop?sale=true", label: "Sale", className: "text-brand-red" }
   ];
+
+  // Better page matching logic
+  const isActiveLink = (href: string) => {
+    if (href === "/" && location === "/") return true;
+    if (href !== "/" && location.startsWith(href.split('?')[0])) {
+      // For query-based links, check if URL contains the query
+      const [path, query] = href.split('?');
+      if (query && location.includes('?')) {
+        const currentQuery = new URLSearchParams(location.split('?')[1]);
+        const linkQuery = new URLSearchParams(query);
+        const entries = Array.from(linkQuery.entries());
+        for (const [key, value] of entries) {
+          if (currentQuery.get(key) === value) return true;
+        }
+      }
+      return !query; // If no query, match by path only
+    }
+    return false;
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-200" data-testid="navbar">
@@ -39,7 +60,7 @@ export default function Navbar() {
                 <Link key={link.href} href={link.href}>
                   <span 
                     className={`text-charcoal hover:text-brand-red transition-colors duration-200 font-medium cursor-pointer ${
-                      location === link.href ? 'text-brand-red' : ''
+                      isActiveLink(link.href) ? 'text-brand-red border-b-2 border-brand-red pb-1' : ''
                     } ${link.className || ''}`}
                     data-testid={`nav-link-${link.label.toLowerCase()}`}
                   >
@@ -112,7 +133,7 @@ export default function Navbar() {
               <Link key={link.href} href={link.href}>
                 <span 
                   className={`block px-3 py-2 text-charcoal hover:text-brand-red font-medium cursor-pointer ${
-                    location === link.href ? 'text-brand-red' : ''
+                    isActiveLink(link.href) ? 'text-brand-red bg-red-50' : ''
                   } ${link.className || ''}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                   data-testid={`mobile-nav-link-${link.label.toLowerCase()}`}
