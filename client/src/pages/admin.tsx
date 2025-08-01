@@ -160,8 +160,8 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12" data-testid="admin-page">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="p-6" data-testid="admin-page">
+      <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-charcoal mb-2" data-testid="admin-title">
             Admin Dashboard

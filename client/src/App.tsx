@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import CartModal from "@/components/cart-modal";
+import { useState, useEffect } from "react";
 
 import Home from "@/pages/home";
 import Shop from "@/pages/shop";
@@ -35,13 +36,32 @@ function Router() {
       <Route path="/product/:slug" component={ProductPage} />
       <Route path="/cart" component={Cart} />
       <Route path="/checkout" component={Checkout} />
-      <Route path="/admin-dashboard-luxe-secret" component={AdminPage} />
+
       <Route component={NotFound} />
     </Switch>
   );
 }
 
 function App() {
+  const [showAdmin, setShowAdmin] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Trigger admin panel with Ctrl+Shift+A
+      if (event.ctrlKey && event.shiftKey && event.key === 'A') {
+        event.preventDefault();
+        setShowAdmin(true);
+      }
+      // Close admin panel with Escape
+      if (event.key === 'Escape' && showAdmin) {
+        setShowAdmin(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showAdmin]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -53,6 +73,26 @@ function App() {
           <Footer />
           <CartModal />
           <Toaster />
+          
+          {/* Admin Panel Modal */}
+          {showAdmin && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-lg w-full max-w-7xl max-h-[90vh] overflow-hidden">
+                <div className="p-6 border-b flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">Admin Panel</h2>
+                  <button
+                    onClick={() => setShowAdmin(false)}
+                    className="text-gray-500 hover:text-gray-700 text-xl font-bold"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div className="overflow-y-auto max-h-[calc(90vh-80px)]">
+                  <AdminPage />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </TooltipProvider>
     </QueryClientProvider>
